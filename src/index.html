@@ -13,13 +13,13 @@
     <h1>HOlamundoooo</h1>
     <div style="width: 640px; height: 480px" id="mapContainer"></div>
 
-
+    <input id = "linestring"> </input>
     <form action="/getRoute", method = "GET" >
         <button type = "submit"></button>
     </form>
     <script>
         var platform = new H.service.Platform({
-        'apikey': 'z7DV-9kehoT0gbHz_C0sDtv4iP0lR_CPxiARi92Bhcw'
+        'apikey': 'QZPcQ4vAyFdtMD9sibX5TY8VPUetjq0aU9EgM3MhjDg'
       });
 
       // Obtain the default map types from the platform object
@@ -48,9 +48,71 @@
         var onResult = function(result) {
         // ensure that at least one route was found
         if (result.routes.length) {
-            result.routes[0].sections.forEach((section) => {
-                // Create a linestring to use as a point source for the route line
+            // result.routes[0].sections.forEach((section) => {
+            //     // Create a linestring to use as a point source for the route line
+            //     polyline = "BGo4nxK_h59rEvRgtB3mB89B4N4IgKkI0PsJ0UwMwMwHoL8G0KwHgFsEsE8G0FkDkDwC8GsE8LwHoGsE4hB8a4IkDwHgF4hBgK0F8Bw-BkS4_BsOo9BwRk_BkXouB4N8Q8GghCkSoV0F0yB8QgZoG4IwC3c01CjDwMnG4NnG4IjD0KjDkI7BgF_EsO_EkN_EgPjDoLnB0FAkIoB8LkDoQoG0KkNgPkDwCopBsYsiB4SouB4X4rB0U8GkDozBkck1BsdsnBgUoawM8a4IwRwH4IsEgF0FA8LoGgKvMoLvR4IvMoG7GoGvCoQ8GsYsJwR4DsO3D4NrJsJ_OkIvlB4IzFU3XwCrOT7LkD7GnB7zBjcvMrEjInBnGUzKwC7G4DrJsJ_JkSnQ0oBrE8LToavCoQvC4NzF0K_E0FzF4D_JgFzP8B_nBwCrTnBA_EvCjDrEvC3DU3D8B7BoBnBkDvH4D_EgFrE8B3N8Gv-B4cvqB0UrTsJ7G8B_EoBjI3DzF3DzFUjDwCjDsEAsEoB8GwCgF8BoGT0FjD8GnLkNrEgFrEsE3DsErT0U_EkDrE4DzFoBrETzF3DjDvC3DnB3DA_JnBvH3D_EjD7GjNkDnQ4D7GoGzF8GjD4IToL8BkS4NoawR04DwyC01Cs7BgoBkcstDkuC8BoBkNsJsO0K8uBkhB84BgoBwlBsYg3BsdozBkXkhBwM8iCwRssBsJ8gDgPg_CgP4pC0K8sCoL00FsdgP8BknD0P0esE8vDsOsiGgew_DgUwvBsJoa8GokB8Lof8Lg3B8a0KgFgrCsiBkNoG03B0ZgkDouB4NoG0Z8Lo4BoaogDgtBkrBoQ0tBsOgPsEkmBgFwvBsEkSA03BAwCAkXjDwHAkuC3DkrBoBgUwC0Z0FoV8GsY8LoGkD8GkD47Dg8BgyBsY4qEghC46BgjBgjBgZgPkIgUkI8xC4c4N0Fw_Dw-BgZ8LsgC0ew5B8VssB8L4hB0FwWwCkXoBo4BvCokBjIkwBnQkc_O0yB7fw0B3hBosCvvBwqBna08B3mBsJzFsJrEgUzKsOjI0evM4c3IkNvC4mBjI8QvCoLT8VnBo2CUoVUwW8BoVwC4SkD4mBsJofgKoagKgPoGo4B4X82CokBkS0KoQ8LgK4IgPwR8LkS0F8LkIoQsTopBgPgegKoVoBkD8BkDwH0Pge4_BkNkckcg8BU8B08Bo-D8B4DsT0oBgUwqBwM8V0KoQ4IkNoLsOoLwMwRkSwRoQ0oBwlB8zBwvBoVsTwR0P0Z4X0UkSoL0K0jBkhBwR0PopBwlBgekcsY0Z4N0P4DgFgKkNsO0UsiBw0BsdssBkpCovDsO8VgoBk_B0UwgBwM4SsdgtB4Skc4XkhBsT4Xw8C4nDssB0yBkhBwlB0oB8uBgUwWgZ4c0tB8zBoageo9B4kC8iC0rCwb0esJ0KgUwW0PwR8uBk1B8Q4S4SkS0K4IoLsJ8VgPwCoBwWwMwR4IoagK4ckI4hB0F89BkIkhB4DsiBsEw-BwHsjDoLoBA8xCgKoQ4D4NsEoQ8GsTwMkN0KwRwR08B4_BgZwbwRkSofofsToVwRkS84B08B0yBw0B0ewgBkN4NgKgK0KoLsEsEgKwM4NwW8G0KsJwMsEsE0F8GgKgKwR4SkIkI4D4D8L0KsJ4IkI0F4I0FwCoB4IoG0KsJoQoQokBkmBkNsOgPgP8L8LsJ4I0jBsiBkwBouB8agZsO4NwjCsgC0jBsiBoBoB4rB8pBgPsOwM0KgKwHgKoGwM0FwMgFwMkDsTsEsqCwMw3C4NgK8B0jBgF4S4DsYsEwqB8G8fsE0P8BsJUsTUkNAwCAkSA8GTkrB7B8LT8GAokB7B4mB7B4XTwgBAkhB8BoLoBgKoBonCgK0hCgKwlB8GwgBgF4IoB4hBsEsnB0FgZ0F4XoGkXgKoVoL8QoLkSsOgZoVof8a0egZgtBkmBwMoLwRgPsO8L4NoLwM0K8V4S0K0KgFsE8LwM0KwM8VofkNwW8G4N4I0UwHwW4DgP0Foa4DsTsT8gD8Qs0CsEkXkDsTgFwbsE8VsEwWsJkwBU4DUkDoG0ewC4NgFgZkDwR8Lk1B4IgZkIgUkIsO4IkNsJwM4I0KgKgKwMwM0KkIsOgKkIgF4c4SkckSkcwRgZ0PwMwHoV4N8VoQsTwMwlBsY8Q0K0U4N4N4IkIgFsTwM0UkNk1B4hBkXkN0U0KsTkIofoLokBoL8zBoQsiB0KkkCoVw5BkS8BU03B8Q8LwCwMwC0P8BoLAkNTwRnBsTvCg3BnG4XT4SoBkSkD4N4D4NgFsTsJwRoL0PkNwMwMwHgKgFoGgK0PkI8QkIoVgPsnBsJgZwCoGkN4hBgK0ZkSkwB0Kkc0PgoBoGoQkIkDgFUsEvCwC3DoBnGjIrOzK7QjNnV7GjN7GrO7Ljc7GjSjIvWnB3DvMvgBvMvgBzPzoBjI_TjIvRvHvM7G_J3IzKvHjI3IjIvMzKwhDj4CslCjzCkc_O8kBrTwoC7Q4_BnLgoB_EwRzFkS3NkpHr3DoxC3mB4sNztGokBvRwxKjqEwlG0KslCoV07EkrBklEAoiHz1CkoF7L0mHsOopB0hCsjIghM0jBgoBoLgKg3BgjBgmCsE0PwC4mBwWkrBkwB0PsO8pBwgBkN_TokBwW4hBkX8pB8a6OyF"
+            //     let linestring = H.geo.LineString.fromFlexiblePolyline(polyline);
+
+            //     // Create a polyline to display the route:
+            //     let routeLine = new H.map.Polyline(linestring, {
+            //     style: { strokeColor: 'blue', lineWidth: 3 }
+            //     });
+
+            //     // Create a marker for the start point:
+            //     let startMarker = new H.map.Marker(section.departure.place.location);
+
+            //     // Create a marker for the end point:
+            //     let endMarker = new H.map.Marker(section.arrival.place.location);
+
+            //     // Add the route polyline and the two markers to the map:
+            //     map.addObjects([routeLine, startMarker, endMarker]);
+
+            //     // Set the map's viewport to make the whole route visible:
+            //     map.getViewModel().setLookAtData({bounds: routeLine.getBoundingBox()});
+            // });
+
+            var section = {
+                    "id": "3ea2d11c-1e1e-468d-a033-c0f0023d3313",
+                    "type": "vehicle",
+                    "departure": {
+                        "time": "2020-11-21T15:46:16-05:00",
+                        "place": {
+                            "type": "place",
+                            "location": {
+                                "lat": 5.52538,
+                                "lng": -73.364
+                            },
+                            "originalLocation": {
+                                "lat": 5.5252999,
+                                "lng": -73.3640411
+                            }
+                        }
+                    },
+                    "arrival": {
+                        "time": "2020-11-21T16:44:32-05:00",
+                        "place": {
+                            "type": "place",
+                            "location": {
+                                "lat": 5.7648671,
+                                "lng": -73.2459711
+                            },
+                            "originalLocation": {
+                                "lat": 5.764939,
+                                "lng": -73.246165
+                            }
+                        }
+                    },
+                    "polyline": "BGo4nxK_h59rEvRgtB3mB89B4N4IgKkI0PsJ0UwMwMwHoL8G0KwHgFsEsE8G0FkDkDwC8GsE8LwHoGsE4hB8a4IkDwHgF4hBgK0F8Bw-BkS4_BsOo9BwRk_BkXouB4N8Q8GghCkSoV0F0yB8QgZoG4IwC3c01CjDwMnG4NnG4IjD0KjDkI7BgF_EsO_EkN_EgPjDoLnB0FAkIoB8LkDoQoG0KkNgPkDwCopBsYsiB4SouB4X4rB0U8GkDozBkck1BsdsnBgUoawM8a4IwRwH4IsEgF0FA8LoGgKvMoLvR4IvMoG7GoGvCoQ8GsYsJwR4DsO3D4NrJsJ_OkIvlB4IzFU3XwCrOT7LkD7GnB7zBjcvMrEjInBnGUzKwC7G4DrJsJ_JkSnQ0oBrE8LToavCoQvC4NzF0K_E0FzF4D_JgFzP8B_nBwCrTnBA_EvCjDrEvC3DU3D8B7BoBnBkDvH4D_EgFrE8B3N8Gv-B4cvqB0UrTsJ7G8B_EoBjI3DzF3DzFUjDwCjDsEAsEoB8GwCgF8BoGT0FjD8GnLkNrEgFrEsE3DsErT0U_EkDrE4DzFoBrETzF3DjDvC3DnB3DA_JnBvH3D_EjD7GjNkDnQ4D7GoGzF8GjD4IToL8BkS4NoawR04DwyC01Cs7BgoBkcstDkuC8BoBkNsJsO0K8uBkhB84BgoBwlBsYg3BsdozBkXkhBwM8iCwRssBsJ8gDgPg_CgP4pC0K8sCoL00FsdgP8BknD0P0esE8vDsOsiGgew_DgUwvBsJoa8GokB8Lof8Lg3B8a0KgFgrCsiBkNoG03B0ZgkDouB4NoG0Z8Lo4BoaogDgtBkrBoQ0tBsOgPsEkmBgFwvBsEkSA03BAwCAkXjDwHAkuC3DkrBoBgUwC0Z0FoV8GsY8LoGkD8GkD47Dg8BgyBsY4qEghC46BgjBgjBgZgPkIgUkI8xC4c4N0Fw_Dw-BgZ8LsgC0ew5B8VssB8L4hB0FwWwCkXoBo4BvCokBjIkwBnQkc_O0yB7fw0B3hBosCvvBwqBna08B3mBsJzFsJrEgUzKsOjI0evM4c3IkNvC4mBjI8QvCoLT8VnBo2CUoVUwW8BoVwC4SkD4mBsJofgKoagKgPoGo4B4X82CokBkS0KoQ8LgK4IgPwR8LkS0F8LkIoQsTopBgPgegKoVoBkD8BkDwH0Pge4_BkNkckcg8BU8B08Bo-D8B4DsT0oBgUwqBwM8V0KoQ4IkNoLsOoLwMwRkSwRoQ0oBwlB8zBwvBoVsTwR0P0Z4X0UkSoL0K0jBkhBwR0PopBwlBgekcsY0Z4N0P4DgFgKkNsO0UsiBw0BsdssBkpCovDsO8VgoBk_B0UwgBwM4SsdgtB4Skc4XkhBsT4Xw8C4nDssB0yBkhBwlB0oB8uBgUwWgZ4c0tB8zBoageo9B4kC8iC0rCwb0esJ0KgUwW0PwR8uBk1B8Q4S4SkS0K4IoLsJ8VgPwCoBwWwMwR4IoagK4ckI4hB0F89BkIkhB4DsiBsEw-BwHsjDoLoBA8xCgKoQ4D4NsEoQ8GsTwMkN0KwRwR08B4_BgZwbwRkSofofsToVwRkS84B08B0yBw0B0ewgBkN4NgKgK0KoLsEsEgKwM4NwW8G0KsJwMsEsE0F8GgKgKwR4SkIkI4D4D8L0KsJ4IkI0F4I0FwCoB4IoG0KsJoQoQokBkmBkNsOgPgP8L8LsJ4I0jBsiBkwBouB8agZsO4NwjCsgC0jBsiBoBoB4rB8pBgPsOwM0KgKwHgKoGwM0FwMgFwMkDsTsEsqCwMw3C4NgK8B0jBgF4S4DsYsEwqB8G8fsE0P8BsJUsTUkNAwCAkSA8GTkrB7B8LT8GAokB7B4mB7B4XTwgBAkhB8BoLoBgKoBonCgK0hCgKwlB8GwgBgF4IoB4hBsEsnB0FgZ0F4XoGkXgKoVoL8QoLkSsOgZoVof8a0egZgtBkmBwMoLwRgPsO8L4NoLwM0K8V4S0K0KgFsE8LwM0KwM8VofkNwW8G4N4I0UwHwW4DgP0Foa4DsTsT8gD8Qs0CsEkXkDsTgFwbsE8VsEwWsJkwBU4DUkDoG0ewC4NgFgZkDwR8Lk1B4IgZkIgUkIsO4IkNsJwM4I0KgKgKwMwM0KkIsOgKkIgF4c4SkckSkcwRgZ0PwMwHoV4N8VoQsTwMwlBsY8Q0K0U4N4N4IkIgFsTwM0UkNk1B4hBkXkN0U0KsTkIofoLokBoL8zBoQsiB0KkkCoVw5BkS8BU03B8Q8LwCwMwC0P8BoLAkNTwRnBsTvCg3BnG4XT4SoBkSkD4N4D4NgFsTsJwRoL0PkNwMwMwHgKgFoGgK0PkI8QkIoVgPsnBsJgZwCoGkN4hBgK0ZkSkwB0Kkc0PgoBoGoQkIkDgFUsEvCwC3DoBnGjIrOzK7QjNnV7GjN7GrO7Ljc7GjSjIvWnB3DvMvgBvMvgBzPzoBjI_TjIvRvHvM7G_J3IzKvHjI3IjIvMzKwhDj4CslCjzCkc_O8kBrTwoC7Q4_BnLgoB_EwRzFkS3NkpHr3DoxC3mB4sNztGokBvRwxKjqEwlG0KslCoV07EkrBklEAoiHz1CkoF7L0mHsOopB0hCsjIghM0jBgoBoLgKg3BgjBgmCsE0PwC4mBwWkrBkwB0PsO8pBwgBkN_TokBwW4hBkX8pB8a6OyF",
+                    "transport": {
+                        "mode": "car"
+                    }
+                }
+
+                    // Create a linestring to use as a point source for the route line
+                
                 let linestring = H.geo.LineString.fromFlexiblePolyline(section.polyline);
+                console.log(linestring)
+                document.getElementById('linestring').value = linestring;
 
                 // Create a polyline to display the route:
                 let routeLine = new H.map.Polyline(linestring, {
@@ -68,7 +130,6 @@
 
                 // Set the map's viewport to make the whole route visible:
                 map.getViewModel().setLookAtData({bounds: routeLine.getBoundingBox()});
-            });
         }
         };
 
