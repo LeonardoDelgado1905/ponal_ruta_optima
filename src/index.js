@@ -2,14 +2,10 @@
 // const express = require('express')
 import express from 'express'
 const app = express()
-// const path = require('path')
 import path from 'path'
 const router = express.Router()
-// const fetch = require('node-fetch');
 import fetch from 'node-fetch'
-// var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 app.set('port', process.env.PORT || 3000)
-// const polyline = require('@mapbox/polyline');
 
 import {decode} from './hereDecode.js';
 
@@ -20,16 +16,19 @@ router.get('/', function(req, res){
 
 
 function printRuta(data){
-    var lat = data.routes[0].sections[0].departure.place.location.lat
-    var lng = data.routes[0].sections[0].departure.place.location.lng
-    var lineString = data.routes[0].sections[0].polyline
+    // var lat = data.routes[0].sections[0].departure.place.location.lat
+    // var lng = data.routes[0].sections[0].departure.place.location.lng
+    // var lineString = data.routes[0].sections[0].polyline
 
-    // lineString.coordinates.forEach(coor =>{
-    //     lat += coor[1]
-    //     console.log(lat)
-    // } )
+    // // lineString.coordinates.forEach(coor =>{
+    // //     lat += coor[1]
+    // //     console.log(lat)
+    // // } )
     
-    console.log(decode(lineString))
+    // console.log(decode(lineString))
+}
+function getGeoJSON(flexiblePolyline){
+    return decode(flexiblePolyline)
 }
 router.get('/getRoute', function(req, res){
 
@@ -46,7 +45,8 @@ router.get('/getRoute', function(req, res){
         method: 'GET',
     }).then(response => (response.json()))
     .then(data => {
-        printRuta(data);
+        var polyline = getGeoJSON(data.routes[0].sections[0].polyline);
+        console.log(polyline)
         res.send(data);
     });
 })
