@@ -10,6 +10,10 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.1",
-    "path": "^0.12.7"
+    "fetch": "^1.1.0",
+    "node-fetch": "^2.6.1",
+    "path": "^0.12.7",
+    "whatwg-fetch": "^3.5.0",
+    "xmlhttprequest": "^1.8.0"
   }
 }
