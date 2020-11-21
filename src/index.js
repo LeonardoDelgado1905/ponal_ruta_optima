@@ -18,7 +18,7 @@ router.get('/getRoute', function(req, res){
     var url = 'https://router.hereapi.com/v8/routes?apiKey=bi9WgKRmGyHx9-CGLiQRAo1bc6UXdklzYn0BWUgUpF8';
     url += '&transportMode='+req.query.mode
     url += '&origin='+req.query.latOrigin+","+req.query.lngOrigin
-    url += '&destination='+req.query.latDestination+","+req.query.lngDestination
+    url += '&destination='+req.query.latDestination+bi9WgKRmGyHx9-CGLiQRAo1bc6UXdklzYn0BWUgUpF8","+req.query.lngDestination
     url += '&return=summary'
     console.log(url)
     // &transportMode=car&origin=52.5308,13.3847&destination=52.5323,13.3789&return=summary';
