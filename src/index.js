@@ -7,13 +7,16 @@ const router = express.Router()
 import fetch from 'node-fetch'
 app.set('port', process.env.PORT || 3000)
 
-import {decode} from './hereDecode.js';
+import {decode} from './hereDecode.js'
+import bodyParser from 'body-parser'
 
-
+var __dirname = path.resolve(path.dirname(''));
 router.get('/', function(req, res){
-    res.sendFile(path.join(__dirname+'/index.html'));
+    // console.log(__dirname)
+    res.sendFile(path.join(__dirname+'/src/index.html'));
 })
 
+// app.use(bodyParser.json())
 
 function printRuta(data){
     // var lat = data.routes[0].sections[0].departure.place.location.lat
@@ -47,11 +50,13 @@ function sortJSON(data, key, orden) {
 }
 // var oJSON = sortJSON(elJSON, 'num', 'asc');
 
+function getTop(rutas, numSolicitadas){
+    
+}
+async function calculateRoute(patrulla, servicio, rutas, tope){
 
-function calculateRoute(patrulla, servicio){
-
-    if(patrulla.tipo == "MOTO"){
-        patrulla.tipo = 'ped'
+    if(patrulla.tipo === "moto"){
+        patrulla.tipo = 'pedestrian'
     }else{
         patrulla.tipo = 'car'
     }
@@ -64,40 +69,62 @@ function calculateRoute(patrulla, servicio){
     url += '&return=summary,polyline'
     // &transportMode=car&origin=52.5308,13.3847&destination=52.5323,13.3789&return=summary';
 
-
-    fetch(url, {
+    var ruta = {}
+    await fetch(url, {
         method: 'GET',
     }).then(response => (response.json()))
     .then(data => {        
-        var ruta = {
-            patrulla: patrulla,
-            tiempoEstimado: data.routes[0].sections[0].summary.duration,
-            polyline: getGeoJSON(data.routes[0].sections[0].polyline)
+        ruta = {
+            "patrulla": patrulla,
+            "tiempoEstimado": data.routes[0].sections[0].summary.duration,
+            "polyline": getGeoJSON(data.routes[0].sections[0].polyline)
         }
-        return ruta
+        // console.log(ruta)
+        
     });
-
+    // console.log(ruta.tiempoEstimado)
+    return ruta;
 }
-// function(patrullas[], servicio, numSolicitadas){
-//     elegibles[]
-//     patrullas.sort(eculidean)
-//     for(patrulla in Top_numSolicitadas * 2 _patrullas){
-//         elegibles.add(patrulla)
-//     }
+
+function euclideanDist(patrullas, servicio){
+    for(var i = 0; i < patrullas.length; ++i){
+        var patrulla = patrullas[i]
+        patrulla.euclideanDist = Math.sqrt((patrulla.lat - servicio.lat)*(patrulla.lat - servicio.lat) + (patrulla.lng - servicio.lng)*(patrulla.lng - servicio.lng))
+    }
+}
+/////logica
+async function resolveRutaOptima(patrullas, servicio, numSolicitadas){
+    var elegibles = []
+    euclideanDist(patrullas, servicio)
+    sortJSON(patrullas, 'euclideanDist', 'asc')
+    // for(var i = 0; i < patrullas.length && i < 2*numSolicitadas; ++i){
+    //     patrulla = patrullas[i]
+    //     elegibles.push(patrulla)
+    // }
+    var tope = Math.min(2*numSolicitadas, patrullas.length)
+    var elegibles = patrullas.slice(0, tope)
+    var rutas = []
     
-//     routes[]
+    for(var i = 0; i < elegibles.length; ++i){ //HERE
+        var elegible = elegibles[i]
+        var ruta = await calculateRoute(elegible, servicio, rutas, tope)
+        rutas.push(ruta)
+    }
+    // console.log(rutas)
+    sortJSON(rutas, 'tiempoEstimado', 'asc')
+    return rutas.slice(0, numSolicitadas)
+    
+}
 
-//     for(elegible in elegibles){ //HERE
-//         routes.add(calculateRoute(elegible, servicio))
-//     }
-//     routes.sort(tiempo, asc)
-
-//     return routes[:numSolicitadas]
-// }
-router.get('/getRoute', function(req, res){
-
-    res.send(calculateRoute(req.query.patrulla, req.query.servicio))
-
+app.use(bodyParser.json()); // body en formato json
+app.use(bodyParser.urlencoded({ extended: false })); //body formulario
+router.post('/getOptima', async function(req, res){
+    // createChart(JSON.parse(req.body).responses);
+    // res.send(calculateRoute(req.query.patrulla, req.query.servicio))
+    // console.log("no masss")
+    var out = await resolveRutaOptima(req.body.patrullas, req.body.servicio, req.body.numero_patrullas_solicitadas)
+    console.log(out)  
+    res.send("yes")
     // var url = 'https://router.hereapi.com/v8/routes?';
     // url += 'apiKey='+'QZPcQ4vAyFdtMD9sibX5TY8VPUetjq0aU9EgM3MhjDg'
     // url += '&transportMode='+req.query.mode
