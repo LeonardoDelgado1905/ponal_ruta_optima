@@ -1,14 +1,14 @@
 
 // const express = require('express')
-import express from 'express'
-const app = express()
-import path from 'path'
-const router = express.Router()
-import fetch from 'node-fetch'
-app.set('port', process.env.PORT || 3000)
 
+import express from 'express'
+import path from 'path'
 import {decode} from './hereDecode.js'
+import {sortJSON, euclideanDist} from './functions.js'
 import bodyParser from 'body-parser'
+import fetch from 'node-fetch'
+const router = express.Router()
+const app = express()
 
 var __dirname = path.resolve(path.dirname(''));
 router.get('/', function(req, res){
@@ -18,41 +18,12 @@ router.get('/', function(req, res){
 
 // app.use(bodyParser.json())
 
-function printRuta(data){
-    // var lat = data.routes[0].sections[0].departure.place.location.lat
-    // var lng = data.routes[0].sections[0].departure.place.location.lng
-    // var lineString = data.routes[0].sections[0].polyline
-
-    // // lineString.coordinates.forEach(coor =>{
-    // //     lat += coor[1]
-    // //     console.log(lat)
-    // // } )
-    
-    // console.log(decode(lineString))
-}
 function getGeoJSON(flexiblePolyline){
     return decode(flexiblePolyline)
 }
 
-function sortJSON(data, key, orden) {
-    return data.sort(function (a, b) {
-        var x = a[key],
-        y = b[key];
-
-        if (orden === 'asc') {
-            return ((x < y) ? -1 : ((x > y) ? 1 : 0));
-        }
-
-        if (orden === 'desc') {
-            return ((x > y) ? -1 : ((x < y) ? 1 : 0));
-        }
-    });
-}
 // var oJSON = sortJSON(elJSON, 'num', 'asc');
 
-function getTop(rutas, numSolicitadas){
-    
-}
 async function calculateRoute(patrulla, servicio, rutas, tope){
 
     if(patrulla.tipo === "moto"){
@@ -86,12 +57,6 @@ async function calculateRoute(patrulla, servicio, rutas, tope){
     return ruta;
 }
 
-function euclideanDist(patrullas, servicio){
-    for(var i = 0; i < patrullas.length; ++i){
-        var patrulla = patrullas[i]
-        patrulla.euclideanDist = Math.sqrt((patrulla.lat - servicio.lat)*(patrulla.lat - servicio.lat) + (patrulla.lng - servicio.lng)*(patrulla.lng - servicio.lng))
-    }
-}
 /////logica
 async function resolveRutaOptima(patrullas, servicio, numSolicitadas){
     var elegibles = []
@@ -116,6 +81,7 @@ async function resolveRutaOptima(patrullas, servicio, numSolicitadas){
     
 }
 
+app.set('port', process.env.PORT || 3000)
 app.use(bodyParser.json()); // body en formato json
 app.use(bodyParser.urlencoded({ extended: false })); //body formulario
 router.post('/getOptima', async function(req, res){
