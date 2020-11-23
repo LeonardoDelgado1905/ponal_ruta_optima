@@ -124,7 +124,7 @@ router.post('/getOptima', async function(req, res){
     // console.log("no masss")
     var out = await resolveRutaOptima(req.body.patrullas, req.body.servicio, req.body.numero_patrullas_solicitadas)
     console.log(out)  
-    res.send("yes")
+    res.send(out)
     // var url = 'https://router.hereapi.com/v8/routes?';
     // url += 'apiKey='+'QZPcQ4vAyFdtMD9sibX5TY8VPUetjq0aU9EgM3MhjDg'
     // url += '&transportMode='+req.query.mode
