@@ -146,5 +146,5 @@ router.post('/getOptima', async function(req, res){
 
 app.use(router)
 app.listen(app.get('port'), () => {
-    console.log("esta corriendo weeey")
+    console.log("it's running on port " + app.get('port'))
 })
