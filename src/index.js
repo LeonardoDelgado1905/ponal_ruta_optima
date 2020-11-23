@@ -119,29 +119,9 @@ async function resolveRutaOptima(patrullas, servicio, numSolicitadas){
 app.use(bodyParser.json()); // body en formato json
 app.use(bodyParser.urlencoded({ extended: false })); //body formulario
 router.post('/getOptima', async function(req, res){
-    // createChart(JSON.parse(req.body).responses);
-    // res.send(calculateRoute(req.query.patrulla, req.query.servicio))
-    // console.log("no masss")
     var out = await resolveRutaOptima(req.body.patrullas, req.body.servicio, req.body.numero_patrullas_solicitadas)
     console.log(out)  
     res.send(out)
-    // var url = 'https://router.hereapi.com/v8/routes?';
-    // url += 'apiKey='+'QZPcQ4vAyFdtMD9sibX5TY8VPUetjq0aU9EgM3MhjDg'
-    // url += '&transportMode='+req.query.mode
-    // url += '&origin='+req.query.latOrigin+","+req.query.lngOrigin
-    // url += '&destination='+req.query.latDestination+','+req.query.lngDestination
-    // url += '&return=summary,polyline'
-    // // &transportMode=car&origin=52.5308,13.3847&destination=52.5323,13.3789&return=summary';
-
-
-    // fetch(url, {
-    //     method: 'GET',
-    // }).then(response => (response.json()))
-    // .then(data => {
-    //     var polyline = getGeoJSON(data.routes[0].sections[0].polyline);
-    //     console.log(polyline)
-    //     res.send(data);
-    // });
 })
 
 app.use(router)
