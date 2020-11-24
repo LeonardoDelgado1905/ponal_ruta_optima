@@ -45,10 +45,10 @@ function decode(encoded) {
         if (thirdDim) {
             const deltaZ = toSigned(decoder[i + 2]) / factorZ;
             lastZ += deltaZ;
-            res.push([lastLat, lastLng, lastZ]);
+            res.push([lastLng, lastLat, lastZ]);
             i += 3;
         } else {
-            res.push([lastLat, lastLng]);
+            res.push([lastLng, lastLat]);
             i += 2;
         }
     }
