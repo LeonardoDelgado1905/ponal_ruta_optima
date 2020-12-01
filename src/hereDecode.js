@@ -19,7 +19,8 @@ const ELEVATION = 3;
 // Reserved values 4 and 5 should not be selectable
 const CUSTOM1 = 6;
 const CUSTOM2 = 7;
-
+//    5.544875,
+  //  -73.354302
 const Num = typeof BigInt !== "undefined" ? BigInt : Number;
 
 function decode(encoded) {
