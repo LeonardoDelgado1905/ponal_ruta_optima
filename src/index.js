@@ -11,7 +11,7 @@ const router = express.Router()
 const app = express()
 
 var __dirname = path.resolve(path.dirname(''));
-router.get('/', function(req, res){
+router.get('/RutaOptima', function(req, res){
     // console.log(__dirname)
     res.sendFile(path.join(__dirname+'/src/index.html'));
 })
@@ -84,7 +84,7 @@ async function resolveRutaOptima(patrullas, servicio, numSolicitadas){
 app.set('port', process.env.PORT || 3000)
 app.use(bodyParser.json()); // body en formato json
 app.use(bodyParser.urlencoded({ extended: false })); //body formulario
-router.post('/getOptima', async function(req, res){
+router.post('/RutaOptima/getOptima', async function(req, res){
     var out = await resolveRutaOptima(req.body.patrullas, req.body.servicio, req.body.numero_patrullas_solicitadas)
     console.log(out)  
     res.send(out)
