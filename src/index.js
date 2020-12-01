@@ -81,7 +81,7 @@ async function resolveRutaOptima(patrullas, servicio, numSolicitadas){
     
 }
 
-app.set('port', process.env.PORT || 80)
+app.set('port', process.env.PORT || 3000)
 app.use(bodyParser.json()); // body en formato json
 app.use(bodyParser.urlencoded({ extended: false })); //body formulario
 router.post('/getOptima', async function(req, res){
